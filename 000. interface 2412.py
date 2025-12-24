@@ -74,8 +74,12 @@ df_int_edu = df_int_edu_bac_stats
 # =========================
 # UI – constantes
 # =========================
-st.title("🎓 Simulateur de score Parcoursup")
+st.title("🎓 Démonstrateur score Parcoursup 2025")
 
+st.link_button(
+    "📘 Explications sur le modèle 📘 ",
+    "https://www.canva.com/design/DAG8aLOyIs0/gaIzrqdGvFNsIczoMI4eBg/view?utm_content=DAG8aLOyIs0&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h7c306db998#1"
+)
 
 def rgb_tuple_to_hex(rgb):
     r, g, b = [int(255 * x) for x in rgb]
