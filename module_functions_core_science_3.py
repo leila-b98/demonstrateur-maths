@@ -390,7 +390,7 @@ def bin_means_trapz(params5, bins=BINS, n_per_bin=200):
     for x0, x1 in bins:
         xs = np.linspace(x0, x1, n_per_bin)
         ys = generalized_sigmoid_Lq(xs, a, b, c, L, q)
-        area = np.trapz(ys, xs)
+        area = np.trapezoid(ys, xs)
         means.append(area / (x1 - x0))
 
     return np.asarray(means, dtype=float)
