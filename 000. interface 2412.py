@@ -78,7 +78,7 @@ st.title("🎓 Démonstrateur score Parcoursup 2025")
 
 st.link_button(
     "📘 Explications sur le modèle 📘 ",
-    "https://www.canva.com/design/DAG8aLOyIs0/gaIzrqdGvFNsIczoMI4eBg/view?utm_content=DAG8aLOyIs0&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h7c306db998#1"
+    "https://www.canva.com/design/DAG8aLOyIs0/gaIzrqdGvFNsIczoMI4eBg/view?utm_content=DAG8aLOyIs0&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h7c306db998"
 )
 
 def rgb_tuple_to_hex(rgb):
