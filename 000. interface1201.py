@@ -45,6 +45,11 @@ st.link_button(
 # DEBUG 
 
 import numpy as np
+
+if not hasattr(np, "trapz") and hasattr(np, "trapezoid"):
+    # NumPy récent : on recolle trapz sur trapezoid
+    np.trapz = np.trapezoid
+
 st.write("Debug NumPy:", np.__version__)
 st.write("NumPy file:", getattr(np, "__file__", "no __file__"))
 st.write("Has trapz:", hasattr(np, "trapz"))
