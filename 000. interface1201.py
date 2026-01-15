@@ -42,6 +42,13 @@ st.link_button(
     "https://www.canva.com/design/DAG8aLOyIs0/gaIzrqdGvFNsIczoMI4eBg/view?utm_content=DAG8aLOyIs0&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h7c306db998#1",
 )
 
+# DEBUG 
+
+import numpy as np
+st.write("Debug NumPy:", np.__version__)
+st.write("NumPy file:", getattr(np, "__file__", "no __file__"))
+st.write("Has trapz:", hasattr(np, "trapz"))
+
 
 # =========================
 # Chargement des données
