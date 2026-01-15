@@ -42,17 +42,16 @@ st.link_button(
     "https://www.canva.com/design/DAG8aLOyIs0/gaIzrqdGvFNsIczoMI4eBg/view?utm_content=DAG8aLOyIs0&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h7c306db998#1",
 )
 
-# DEBUG 
-
+# =========================
+# Remplacement de trapz
+# (pas trapz sur streamlit visiblement)
+# =========================
 import numpy as np
 
 if not hasattr(np, "trapz") and hasattr(np, "trapezoid"):
     # NumPy récent : on recolle trapz sur trapezoid
     np.trapz = np.trapezoid
 
-st.write("Debug NumPy:", np.__version__)
-st.write("NumPy file:", getattr(np, "__file__", "no __file__"))
-st.write("Has trapz:", hasattr(np, "trapz"))
 
 
 # =========================
