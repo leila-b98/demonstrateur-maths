@@ -1230,7 +1230,7 @@ def calcul_score_new_with_bonus(df_edu, df_int_edu, uai, rang, bac_type, id_parc
         #Si la doublette n'est pas du tout représentée
             result = None
             bonus_doublettes = 0
-            warnings.append('010-doublettes-info-no-match')
+            messages.append('010-doublettes-info-no-match')
 
     resultat = resultat * bonus_doublettes
 
