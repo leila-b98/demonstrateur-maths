@@ -1210,27 +1210,31 @@ def calcul_score_new_with_bonus(df_edu, df_int_edu, uai, rang, bac_type, id_parc
 
     #Prise en compte des doublettes 
     # on extrait les spés
-    spe_1, spe_2 = doublettes
-    df = select_eds(df_eds, id_parcoursup, bac_type)     #sélection du tableau avec les bonus des doublettes
-    mask_doublette = df['eds_slugs'].apply(lambda x: isinstance(x, list) and set(x) == {spe_1, spe_2})
-    df_select = df[mask_doublette]
-    if not df_select.empty:
-        result = df_select.iloc[0]
-        bonus_doublettes = result['facteur_eds']
-
-    else:
-        # Si la doublette n'est pas trouvée, on regarde la ligne "Autres doublettes"
-        mask_autres = df['eds'].apply(lambda x: isinstance(x, list) and 'Autres doublettes' in x)
-        df_autres = df[mask_autres]
-        if not df_autres.empty:
-            result = df_autres.iloc[0]
+    if doublettes == None : 
+        bonus_doublettes = 1
+        messages.append('Pas de spécialité prise en compte')
+    else : 
+        spe_1, spe_2 = doublettes
+        df = select_eds(df_eds, id_parcoursup, bac_type)     #sélection du tableau avec les bonus des doublettes
+        mask_doublette = df['eds_slugs'].apply(lambda x: isinstance(x, list) and set(x) == {spe_1, spe_2})
+        df_select = df[mask_doublette]
+        if not df_select.empty:
+            result = df_select.iloc[0]
             bonus_doublettes = result['facteur_eds']
 
         else:
-        #Si la doublette n'est pas du tout représentée
-            result = None
-            bonus_doublettes = 0
-            messages.append('010-doublettes-info-no-match')
+            # Si la doublette n'est pas trouvée, on regarde la ligne "Autres doublettes"
+            mask_autres = df['eds'].apply(lambda x: isinstance(x, list) and 'Autres doublettes' in x)
+            df_autres = df[mask_autres]
+            if not df_autres.empty:
+                result = df_autres.iloc[0]
+                bonus_doublettes = result['facteur_eds']
+
+            else:
+            #Si la doublette n'est pas du tout représentée
+                result = None
+                bonus_doublettes = 0
+                messages.append('010-doublettes-info-no-match')
 
     resultat = resultat * bonus_doublettes
 
@@ -1250,6 +1254,7 @@ def calcul_score_new_with_bonus(df_edu, df_int_edu, uai, rang, bac_type, id_parc
             }
 
     return result_dict
+
 
 
 # TESTS DES FONCTIONS ET PLOTS 

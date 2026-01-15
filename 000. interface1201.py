@@ -31,6 +31,17 @@ sys.modules["module_functions_core_science_1201"] = m
 spec.loader.exec_module(m)
 
 # =========================
+# Remplacement de trapz
+# (pas trapz sur streamlit visiblement)
+# =========================
+import numpy as np
+
+if not hasattr(np, "trapz") and hasattr(np, "trapezoid"):
+    # NumPy récent : on recolle trapz sur trapezoid
+    np.trapz = np.trapezoid
+
+
+# =========================
 # Config Streamlit
 # =========================
 
@@ -41,17 +52,6 @@ st.link_button(
     "📘 Explications sur le modèle 📘",
     "https://www.canva.com/design/DAG8aLOyIs0/gaIzrqdGvFNsIczoMI4eBg/view?utm_content=DAG8aLOyIs0&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h7c306db998#1",
 )
-
-# =========================
-# Remplacement de trapz
-# (pas trapz sur streamlit visiblement)
-# =========================
-import numpy as np
-
-if not hasattr(np, "trapz") and hasattr(np, "trapezoid"):
-    # NumPy récent : on recolle trapz sur trapezoid
-    np.trapz = np.trapezoid
-
 
 
 # =========================
@@ -449,8 +449,24 @@ with st.sidebar:
 
     # doublettes
     st.markdown("### Spécialités (doublettes)")
-    spe1 = st.text_input("Spécialité 1 (slug ou texte)", value="maths")
-    spe2 = st.text_input("Spécialité 2 (slug ou texte)", value="ses")
+    # Par défaut :
+    # - bac general  -> "Avec doublettes"
+    # - bac techno/pro -> "Pas de doublettes"
+    default_doublettes_index = 0 if type_bac == "general" else 1
+
+    doublettes_mode = st.radio(
+        "Prise en compte des spécialités",
+        ["Avec doublettes", "Pas de doublettes"],
+        horizontal=True,
+    )
+
+    if doublettes_mode == "Avec doublettes":
+        spe1 = st.text_input("Spécialité 1 (slug ou texte)", value="maths")
+        spe2 = st.text_input("Spécialité 2 (slug ou texte)", value="ses")
+        doublettes = [spe1, spe2]
+    else:
+        st.caption("Les doublettes ne seront pas prises en compte dans le calcul du score.")
+        doublettes = None
 
     run_button = st.button("Calculer le score et afficher les courbes")
 
@@ -487,7 +503,7 @@ try:
         int(id_parcoursup),
         note_bac,
         current_average,
-        [spe1, spe2],
+        doublettes,  # ⬅️ ici on passe soit [spe1, spe2], soit None
     )
 except Exception as e:
     st.error(f"Erreur lors du calcul du score : {e}")
