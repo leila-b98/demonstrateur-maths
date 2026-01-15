@@ -54,6 +54,7 @@ st.link_button(
 )
 
 
+
 # =========================
 # Chargement des données
 # =========================
@@ -70,7 +71,6 @@ def load_data():
     df_uai_ref = pd.read_pickle("df_uai_results_bac.pkl")
 
     return df_int_select, df_int_edu_bac_stats, df_eds, df_edu_bac_stat, df_uai_ref
-
 
 (
     df_int_select,
@@ -119,11 +119,16 @@ def _prepare_uai_reference(df: pd.DataFrame) -> pd.DataFrame:
 
 df_uai_menu = _prepare_uai_reference(df_uai_ref)
 UAI_NONE_KEY = "__NONE__"
-uai_options = [UAI_NONE_KEY] + df_uai_menu["school_uai"].tolist()
+
+# Dictionnaire info UAI -> (titre, académie)
 _uai_to_info = (
     df_uai_menu.set_index("school_uai")[["school_title", "academy_code"]]
     .to_dict(orient="index")
 )
+
+# Tri alphabétique des codes UAI (chaînes mélange lettres/chiffres)
+uai_sorted = sorted(df_uai_menu["school_uai"].tolist())
+uai_options = [UAI_NONE_KEY] + uai_sorted
 
 
 def format_uai_option(uai_key: str) -> str:
@@ -400,7 +405,10 @@ with st.sidebar:
     st.header("Entrées")
 
     # 1) id_parcoursup d'abord (tous les ids existants dans df_int_select)
-    ids_all = sorted(df_int_select["id_parcoursup"].dropna().unique().tolist())
+    # On force les id_parcoursup à être des entiers pour ne pas avoir .0 dans le menu
+    ids_raw = df_int_select["id_parcoursup"].dropna().unique().tolist()
+    ids_all = sorted({int(x) for x in ids_raw})  # cast en int + tri
+
     if not ids_all:
         st.error("Aucun id_parcoursup disponible pour df_int_results_taux_bac.")
         st.stop()
@@ -541,6 +549,13 @@ negative_factors = [f for f in factors if f.get("impact") == "negative"]
 # =========================
 # Affichage du score
 # =========================
+base_url = "https://dossier.parcoursup.fr/Candidats/public/fiches/afficherFicheFormation"
+formation_url = f"{base_url}?g_ta_cod={int(id_parcoursup)}&typeBac=0&originePc=0"
+st.markdown(
+    f"🔗 **Lien formation** : "
+    f"[Accéder à la fiche Parcoursup]({formation_url})"
+)
+
 st.subheader("1) Résultats du nouveau modèle")
 
 col_score, col_info = st.columns([1, 1.4])
